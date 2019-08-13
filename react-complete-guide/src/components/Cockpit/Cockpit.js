@@ -1,12 +1,20 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useContext} from 'react';
+
 import classes from '../Cockpit/Cockpit.css'
 import './Cockpit.css';
+import AuthContext from '../../context/auth-context'
+import { log } from 'util';
 
 
 const cockpit = (props) => {
+    const toggleBtnRef = useRef(null);
+    const authContext = useContext(AuthContext);
+
+    console.log(authContext.authenticated);
+
     useEffect(() => {
-      console.log('[Cockpit.js] useEffect');
-    })
+      toggleBtnRef.current.click();
+    }, []);
     let assignedClasses = [];
     let btnClass = {
     color: ''
@@ -26,9 +34,12 @@ const cockpit = (props) => {
       <h1>Hi, I'm a React app!</h1>
       <h2>{props.title}</h2>
       <p className="red bold">Oh yeah? Prove it!</p>
-          <button style={btnClass}
-              onClick={props.click}>Show the people!</button>
-         </div>
+          <button ref={toggleBtnRef}
+          className='Button'
+              onClick={props.click}>Show the people!
+              </button>
+              <button onClick={authContext.login}>Log in</button>
+      </div>
 );
 };
 
