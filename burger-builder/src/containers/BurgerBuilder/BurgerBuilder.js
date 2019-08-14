@@ -2,6 +2,8 @@ import React, {Component, Fragment} from 'react';
 
 import Burger from '../../components/Burger/Burger'
 import BuildControls from '../../components/Burger/BuildControls/BuildControls'
+import Modal from '../../UI/Modal/Modal'
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -19,9 +21,25 @@ class BurgerBuilder extends Component{
             cheese: 0,
             meat: 0
         },
-        totalPrice: 0
+        totalPrice: 0,
+        purchesable: false,
+        purchasing: false
     }
+    
 
+    updatePurchaseState (ingredients) {
+    
+        const sum = Object.keys(ingredients)
+        .map(key => {
+            return ingredients[key]
+        })
+        .reduce((sum, el) => {
+          return sum + el;
+        }, 0)
+
+        this.setState({purchesable: sum > 0})
+
+    }
     addIngredientHandler = (type) => {
         const oldCount = this.state.ingredients[type];
         const updatedCount = oldCount + 1;
@@ -35,6 +53,8 @@ class BurgerBuilder extends Component{
         const newPrice = oldPrice + priceAddition;
         
         this.setState({totalPrice: newPrice, ingredients: updatedIngredients})
+        this.updatePurchaseState(updatedIngredients);
+
     };
 
     removeIngredientHandler = (type) => {
@@ -53,8 +73,12 @@ class BurgerBuilder extends Component{
         const newPrice = oldPrice - priceReduction;
         
         this.setState({totalPrice: newPrice, ingredients: updatedIngredients})
+        this.updatePurchaseState(updatedIngredients);
     };
     
+    purchaseHandler = () =>  {
+        this.setState({purchasing: true})
+    }
     
     render(){
         const disableInfo = {
@@ -66,11 +90,17 @@ class BurgerBuilder extends Component{
         }
         return(
             <Fragment>
+                <Modal show={this.state.purchasing}>
+                    <OrderSummary ingredients={this.state.ingredients}/>
+                </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
                 ingredientAdded={this.addIngredientHandler}
                 ingredientRemoved={this.removeIngredientHandler}
-                disabled={disableInfo}/>
+                disabled={disableInfo}
+                purchesable={this.state.purchesable}
+                ordered={this.purchaseHandler}
+                price={this.state.totalPrice}/>
             </Fragment>
         );
     }
