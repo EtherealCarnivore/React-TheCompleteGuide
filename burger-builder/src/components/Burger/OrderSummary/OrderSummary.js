@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 
-import Button from '../../../UI/Button/Button'
+import Button from '../../UI/Button/Button'
 
 const orderSummary = (props) => {
   const ingredientSummary = Object.keys(props.ingredients)
@@ -10,7 +10,7 @@ const orderSummary = (props) => {
           style={{textTransform: 'capitalize'}}>{ingredientKey}</span>: {props.ingredients[ingredientKey]}
           </li>
   })
-    return (
+    return ( 
   <Fragment>
       <h3>Your Order</h3>
       <p>A delicious burger with the following ingredients: </p>
