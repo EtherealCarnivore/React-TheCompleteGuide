@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, } from 'react';
 
 import Button from '../../UI/Button/Button'
 
@@ -23,4 +23,4 @@ const orderSummary = (props) => {
   );
 };
 
-export default orderSummary;
+export default React.memo(orderSummary);
